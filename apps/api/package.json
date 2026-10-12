@@ -1,0 +1,21 @@
+{
+  "name": "@branchy/api",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@branchy/db": "workspace:*",
+    "@branchy/git-engine": "workspace:*",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250224.0",
+    "@branchy/typescript-config": "workspace:*",
+    "typescript": "7.0.2",
+    "wrangler": "^3.111.0"
+  }
+}

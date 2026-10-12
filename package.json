@@ -1,0 +1,28 @@
+{
+  "name": "branchy",
+  "version": "0.0.1",
+  "private": true,
+  "author": "Alikuxac <contact@alikuxac.xyz>",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alikuxac/branchy.git"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "@branchy/typescript-config": "workspace:*",
+    "prettier": "3.9.6",
+    "turbo": "^2.11.7",
+    "typescript": "7.0.2"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22"
+  }
+}

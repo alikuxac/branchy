@@ -1,0 +1,10 @@
+{
+  "extends": "@branchy/typescript-config/base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./dist",
+    "types": ["node"],
+    "esModuleInterop": true
+  },
+  "include": ["src", "test"]
+}
