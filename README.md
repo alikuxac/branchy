@@ -65,8 +65,10 @@ The API service runs on `apps/api` using Hono:
 | `GET` | `/health` | Service health status |
 | `GET` | `/api/branches` | List all branches and the active branch ID |
 | `POST` | `/api/branches` | Create a new branch (`{ name, baseBranchId? }`) |
+| `POST` | `/api/branches/fork` | Fork a new branch from a node/head (`{ fromBranchId, newBranchName, fromNodeId? }`) |
 | `POST` | `/api/branches/checkout` | Switch the active branch (`{ branchId }`) |
 | `POST` | `/api/branches/commit` | Append a transaction commit to a branch |
+| `POST` | `/api/branches/virtual-commit` | Append a projected / virtual commit to a branch (`{ branchId, ...payload }`) |
 | `POST` | `/api/branches/merge` | Merge a source branch into a target branch |
 | `POST` | `/api/simulate-diff` | Compare commit histories between two heads |
 | `POST` | `/api/safe-to-spend` | Calculate minimum balance runway over projected deltas |

@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Cloudflare Wrangler & Worker artifacts
+.wrangler/
+dist/
+wrangler.toml
+
+# Environment & Local secrets
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# TypeScript build info
+*.tsbuildinfo

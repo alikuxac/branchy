@@ -8,11 +8,22 @@ import {
   type MergeResult,
   type SafeToSpendResult,
   type TransactionPayload,
+  type VirtualCommitPayload,
 } from "@branchy/git-engine";
 
 export interface CreateBranchDTO {
   name: string;
   baseBranchId?: string;
+}
+
+export interface ForkBranchDTO {
+  fromBranchId: string;
+  newBranchName: string;
+  fromNodeId?: string;
+}
+
+export interface AddCommitDTO extends VirtualCommitPayload {
+  branchId: string;
 }
 
 export interface CheckoutBranchDTO {
@@ -83,6 +94,20 @@ export class FinancialGitService {
     });
   }
 
+  public forkBranch(dto: ForkBranchDTO): Branch {
+    if (!dto.fromBranchId) {
+      throw new Error("fromBranchId is required");
+    }
+    if (!dto.newBranchName || !dto.newBranchName.trim()) {
+      throw new Error("newBranchName is required");
+    }
+    return this.branchManager.forkBranch(
+      dto.fromBranchId,
+      dto.newBranchName.trim(),
+      dto.fromNodeId
+    );
+  }
+
   public checkout(dto: CheckoutBranchDTO): Branch {
     if (!dto.branchId) {
       throw new Error("branchId is required");
@@ -97,6 +122,13 @@ export class FinancialGitService {
       delta: dto.delta,
       payload: dto.payload,
     });
+  }
+
+  public addCommit(dto: AddCommitDTO): CommitNode {
+    if (!dto.branchId) {
+      throw new Error("branchId is required");
+    }
+    return this.branchManager.addCommit(dto.branchId, dto);
   }
 
   public merge(dto: MergeBranchDTO): MergeResult {

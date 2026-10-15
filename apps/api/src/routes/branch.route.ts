@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import {
   financialGitService,
+  type AddCommitDTO,
   type CheckoutBranchDTO,
   type CommitDTO,
   type CreateBranchDTO,
+  type ForkBranchDTO,
   type MergeBranchDTO,
 } from "../services/financial-git.service.js";
 
@@ -18,6 +20,17 @@ branchRouter.post("/", async (c) => {
   try {
     const body = await c.req.json<CreateBranchDTO>();
     const branch = financialGitService.createBranch(body);
+    return c.json({ success: true, branch }, 201);
+  } catch (err: unknown) {
+    const error = err as Error;
+    return c.json({ error: error.message }, 400);
+  }
+});
+
+branchRouter.post("/fork", async (c) => {
+  try {
+    const body = await c.req.json<ForkBranchDTO>();
+    const branch = financialGitService.forkBranch(body);
     return c.json({ success: true, branch }, 201);
   } catch (err: unknown) {
     const error = err as Error;
@@ -47,6 +60,17 @@ branchRouter.post("/commit", async (c) => {
   }
 });
 
+branchRouter.post("/virtual-commit", async (c) => {
+  try {
+    const body = await c.req.json<AddCommitDTO>();
+    const commit = financialGitService.addCommit(body);
+    return c.json({ success: true, commit }, 201);
+  } catch (err: unknown) {
+    const error = err as Error;
+    return c.json({ error: error.message }, 400);
+  }
+});
+
 branchRouter.post("/merge", async (c) => {
   try {
     const body = await c.req.json<MergeBranchDTO>();
@@ -57,3 +81,4 @@ branchRouter.post("/merge", async (c) => {
     return c.json({ error: error.message }, 400);
   }
 });
+

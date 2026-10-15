@@ -1,0 +1,9 @@
+name = "branchy-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+# Cloudflare D1 Database Binding
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "branchy-db"
+# database_id = "<your-d1-database-uuid>"

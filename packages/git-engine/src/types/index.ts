@@ -37,6 +37,7 @@ export interface TransactionPayload {
   description?: string;
   sourceAccount?: string;
   targetAccount?: string;
+  isProjected?: boolean;
 }
 
 export interface CommitNode {
@@ -47,6 +48,30 @@ export interface CommitNode {
   timestamp: number;
   delta: number;
   payload: TransactionPayload;
+  isVirtual?: boolean;
+  nodeType?: NodeType;
+}
+
+export interface ForkBranchOptions {
+  fromNodeId?: string | null;
+}
+
+export interface VirtualCommitPayload {
+  message?: string;
+  amount?: number;
+  delta?: number;
+  type?: TransactionType;
+  category?: string;
+  description?: string;
+  sourceAccount?: string;
+  targetAccount?: string;
+  isProjected?: boolean;
+  nodeType?: NodeType;
+  isVirtual?: boolean;
+  payload?: TransactionPayload;
+  timestamp?: number;
+  additionalParentIds?: string[];
+  [key: string]: unknown;
 }
 
 /**
