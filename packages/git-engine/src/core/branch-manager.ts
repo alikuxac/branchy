@@ -1,13 +1,16 @@
 import type {
   Branch,
   CommitNode,
+  DailyBalancePoint,
   ForkBranchOptions,
   NodeType,
+  ProjectTimelineOptions,
   TransactionPayload,
   TransactionType,
   VirtualCommitPayload,
 } from "../types/index.js";
 import { getCommitAncestry } from "../analytics/calculator.js";
+import { simulateDailyTimeline } from "../analytics/simulator.js";
 
 export interface BranchManagerOptions {
   initialBalance?: number;
@@ -402,6 +405,33 @@ export class BranchManager {
   public getInitialBalance(): number {
     return this.initialBalance;
   }
+
+  public projectTimeline(
+    branchId: string,
+    days: number = 30,
+    options?: ProjectTimelineOptions
+  ): DailyBalancePoint[] {
+    const branch = this.getBranch(branchId);
+    if (!branch) {
+      throw new Error(`Branch '${branchId}' not found.`);
+    }
+
+    let commits: CommitNode[];
+    if (options?.commits) {
+      commits = options.commits;
+    } else {
+      const commitStore = this.getCommitStore();
+      const ancestryIds = getCommitAncestry(branch.headCommitId, commitStore);
+      commits = ancestryIds.map((id) => commitStore.get(id)!).filter(Boolean);
+    }
+
+    const initialBalance = options?.initialBalance ?? this.initialBalance;
+
+    return simulateDailyTimeline(commits, days, {
+      ...options,
+      initialBalance,
+    });
+  }
 }
 
 export const defaultBranchManager = new BranchManager();
@@ -442,4 +472,30 @@ export function addCommit(
 ): CommitNode {
   const mgr = manager ?? defaultBranchManager;
   return mgr.addCommit(branchId, payload);
+}
+
+export function projectTimeline(
+  branchId: string,
+  days?: number,
+  options?: ProjectTimelineOptions,
+  manager?: BranchManager
+): DailyBalancePoint[];
+
+export function projectTimeline(
+  commits: CommitNode[],
+  days?: number,
+  options?: ProjectTimelineOptions
+): DailyBalancePoint[];
+
+export function projectTimeline(
+  target: string | CommitNode[],
+  days: number = 30,
+  options?: ProjectTimelineOptions,
+  manager?: BranchManager
+): DailyBalancePoint[] {
+  if (Array.isArray(target)) {
+    return simulateDailyTimeline(target, days, options);
+  }
+  const mgr = manager ?? defaultBranchManager;
+  return mgr.projectTimeline(target, days, options);
 }

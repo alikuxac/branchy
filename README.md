@@ -72,6 +72,7 @@ The API service runs on `apps/api` using Hono:
 | `POST` | `/api/branches/merge` | Merge a source branch into a target branch |
 | `POST` | `/api/simulate-diff` | Compare commit histories between two heads |
 | `POST` | `/api/safe-to-spend` | Calculate minimum balance runway over projected deltas |
+| `POST` | `/api/project-timeline` | Project daily cashflow timeline for a branch (`{ branchId, days?, startDate? }`) |
 | `POST` | `/api/webhooks/cross-repo-pr` | Webhook receiver for cross-scenario merge requests |
 
 ## License

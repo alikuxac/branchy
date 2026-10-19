@@ -4,12 +4,20 @@ import {
   calculateSafeToSpend,
   type Branch,
   type CommitNode,
+  type DailyBalancePoint,
   type DiffResult,
   type MergeResult,
   type SafeToSpendResult,
   type TransactionPayload,
   type VirtualCommitPayload,
 } from "@branchy/git-engine";
+
+export interface ProjectTimelineDTO {
+  branchId: string;
+  days?: number;
+  startDate?: string | number;
+  initialBalance?: number;
+}
 
 export interface CreateBranchDTO {
   name: string;
@@ -151,6 +159,16 @@ export class FinancialGitService {
     return calculateSafeToSpend(dto.scheduledDeltas, {
       currentBalance: dto.currentBalance,
       reserveFloor: dto.reserveFloor,
+    });
+  }
+
+  public projectTimeline(dto: ProjectTimelineDTO): DailyBalancePoint[] {
+    if (!dto.branchId) {
+      throw new Error("branchId is required");
+    }
+    return this.branchManager.projectTimeline(dto.branchId, dto.days, {
+      startDate: dto.startDate,
+      initialBalance: dto.initialBalance,
     });
   }
 }

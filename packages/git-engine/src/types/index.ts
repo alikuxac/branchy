@@ -113,3 +113,18 @@ export interface SafeToSpendResult {
   projectedMinBalance: number;
   riskDetected: boolean;
 }
+
+export interface DailyBalancePoint {
+  date: string;
+  timestamp: number;
+  balance: number;
+  netChange: number;
+  commitCount: number;
+  commitIds: string[];
+}
+
+export interface ProjectTimelineOptions {
+  startDate?: Date | number | string;
+  initialBalance?: number;
+  commits?: CommitNode[];
+}
