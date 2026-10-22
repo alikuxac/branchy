@@ -1,22 +1,7 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { branches } from "./schema/graph";
 
-export const nodes = sqliteTable("nodes", {
-  id: text("id").primaryKey(),
-  branchId: text("branch_id").notNull(),
-  type: text("type").notNull(), // 'checkpoint' | 'commit' | 'tag'
-  name: text("name"),
-  metadata: text("metadata"), // JSON string
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-});
-
-export const branches = sqliteTable("branches", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull().unique(),
-  baseBranchId: text("base_branch_id"),
-  headCommitId: text("head_commit_id"),
-  isDefault: integer("is_default", { mode: "boolean" }).default(false),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-});
+export * from "./schema/graph";
 
 export const commits = sqliteTable("commits", {
   id: text("id").primaryKey(),
@@ -42,3 +27,8 @@ export const crossRepoPrs = sqliteTable("cross_repo_prs", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
   mergedAt: integer("merged_at", { mode: "timestamp" }),
 });
+
+export type CommitRecord = typeof commits.$inferSelect;
+export type NewCommitRecord = typeof commits.$inferInsert;
+export type CrossRepoPrRecord = typeof crossRepoPrs.$inferSelect;
+export type NewCrossRepoPrRecord = typeof crossRepoPrs.$inferInsert;

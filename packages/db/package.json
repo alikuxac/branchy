@@ -9,19 +9,27 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./schema/graph": {
+      "types": "./src/schema/graph.ts",
+      "import": "./src/schema/graph.ts",
+      "default": "./src/schema/graph.ts"
     }
   },
   "scripts": {
     "check-types": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "test": "tsx --test test/**/*.test.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.39.0"
   },
   "devDependencies": {
     "@branchy/typescript-config": "workspace:*",
+    "@types/node": "26.4.1",
     "drizzle-kit": "^0.30.0",
+    "tsx": "^4.23.15",
     "typescript": "7.0.2"
   }
 }
