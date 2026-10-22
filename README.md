@@ -73,6 +73,7 @@ The API service runs on `apps/api` using Hono:
 | `POST` | `/api/simulate-diff` | Compare commit histories between two heads |
 | `POST` | `/api/safe-to-spend` | Calculate minimum balance runway over projected deltas |
 | `POST` | `/api/project-timeline` | Project daily cashflow timeline for a branch (`{ branchId, days?, startDate? }`) |
+| `POST` | `/api/check-runway` | Check cashflow runway and detect first deficit / buffer breach (`{ branchId?, timeline?, days?, safetyBuffer? }`) |
 | `POST` | `/api/webhooks/cross-repo-pr` | Webhook receiver for cross-scenario merge requests |
 
 ## License

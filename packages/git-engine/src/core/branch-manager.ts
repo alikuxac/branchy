@@ -5,12 +5,15 @@ import type {
   ForkBranchOptions,
   NodeType,
   ProjectTimelineOptions,
+  RunwayWarningOptions,
+  RunwayWarningResult,
   TransactionPayload,
   TransactionType,
   VirtualCommitPayload,
 } from "../types/index.js";
 import { getCommitAncestry } from "../analytics/calculator.js";
 import { simulateDailyTimeline } from "../analytics/simulator.js";
+import { checkRunwayAndDeficit } from "../analytics/runway.js";
 
 export interface BranchManagerOptions {
   initialBalance?: number;
@@ -432,6 +435,15 @@ export class BranchManager {
       initialBalance,
     });
   }
+
+  public checkRunway(
+    branchId: string,
+    days: number = 30,
+    options?: ProjectTimelineOptions & RunwayWarningOptions
+  ): RunwayWarningResult {
+    const timeline = this.projectTimeline(branchId, days, options);
+    return checkRunwayAndDeficit(timeline, options);
+  }
 }
 
 export const defaultBranchManager = new BranchManager();
@@ -498,4 +510,53 @@ export function projectTimeline(
   }
   const mgr = manager ?? defaultBranchManager;
   return mgr.projectTimeline(target, days, options);
+}
+
+export function checkRunway(
+  branchId: string,
+  days?: number,
+  options?: ProjectTimelineOptions & RunwayWarningOptions,
+  manager?: BranchManager
+): RunwayWarningResult;
+
+export function checkRunway(
+  timeline: DailyBalancePoint[],
+  options?: RunwayWarningOptions
+): RunwayWarningResult;
+
+export function checkRunway(
+  commits: CommitNode[],
+  days?: number,
+  options?: ProjectTimelineOptions & RunwayWarningOptions
+): RunwayWarningResult;
+
+export function checkRunway(
+  target: string | DailyBalancePoint[] | CommitNode[],
+  daysOrOptions?: number | (ProjectTimelineOptions & RunwayWarningOptions) | RunwayWarningOptions,
+  options?: ProjectTimelineOptions & RunwayWarningOptions,
+  manager?: BranchManager
+): RunwayWarningResult {
+  if (typeof target === "string") {
+    const days = typeof daysOrOptions === "number" ? daysOrOptions : 30;
+    const opts = typeof daysOrOptions === "object" ? daysOrOptions : options;
+    const mgr = manager ?? defaultBranchManager;
+    return mgr.checkRunway(target, days, opts);
+  }
+
+  if (target.length > 0 && "balance" in target[0]!) {
+    const opts = typeof daysOrOptions === "object" ? daysOrOptions : options;
+    return checkRunwayAndDeficit(target as DailyBalancePoint[], opts);
+  }
+
+  const days = typeof daysOrOptions === "number" ? daysOrOptions : 30;
+  const opts =
+    typeof daysOrOptions === "object"
+      ? (daysOrOptions as ProjectTimelineOptions & RunwayWarningOptions)
+      : options;
+  const timeline = simulateDailyTimeline(
+    target as CommitNode[],
+    days,
+    opts as ProjectTimelineOptions | undefined
+  );
+  return checkRunwayAndDeficit(timeline, opts);
 }

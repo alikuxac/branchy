@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import {
   financialGitService,
+  type CheckRunwayDTO,
   type ProjectTimelineDTO,
   type SafeToSpendDTO,
   type SimulateDiffDTO,
@@ -35,6 +36,17 @@ simulationRouter.post("/project-timeline", async (c) => {
     const body = await c.req.json<ProjectTimelineDTO>();
     const timeline = financialGitService.projectTimeline(body);
     return c.json({ success: true, timeline });
+  } catch (err: unknown) {
+    const error = err as Error;
+    return c.json({ error: error.message }, 400);
+  }
+});
+
+simulationRouter.post("/check-runway", async (c) => {
+  try {
+    const body = await c.req.json<CheckRunwayDTO>();
+    const result = financialGitService.checkRunway(body);
+    return c.json({ success: true, result });
   } catch (err: unknown) {
     const error = err as Error;
     return c.json({ error: error.message }, 400);

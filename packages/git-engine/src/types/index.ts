@@ -128,3 +128,18 @@ export interface ProjectTimelineOptions {
   initialBalance?: number;
   commits?: CommitNode[];
 }
+
+export interface RunwayWarningOptions {
+  safetyBuffer?: number;
+  reserveFloor?: number;
+}
+
+export interface RunwayWarningResult {
+  riskDetected: boolean;
+  riskDate: string | null;
+  runwayDays: number;
+  maxDeficit: number;
+  minBalance: number;
+  maxDeficitDate: string | null;
+  safetyBuffer: number;
+}

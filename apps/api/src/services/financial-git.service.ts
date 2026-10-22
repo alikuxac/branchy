@@ -2,11 +2,14 @@ import {
   BranchManager,
   calculateDiff,
   calculateSafeToSpend,
+  checkRunwayAndDeficit,
   type Branch,
   type CommitNode,
   type DailyBalancePoint,
   type DiffResult,
   type MergeResult,
+  type RunwayWarningOptions,
+  type RunwayWarningResult,
   type SafeToSpendResult,
   type TransactionPayload,
   type VirtualCommitPayload,
@@ -17,6 +20,17 @@ export interface ProjectTimelineDTO {
   days?: number;
   startDate?: string | number;
   initialBalance?: number;
+}
+
+export interface CheckRunwayDTO {
+  branchId?: string;
+  timeline?: DailyBalancePoint[];
+  commits?: CommitNode[];
+  days?: number;
+  startDate?: string | number;
+  initialBalance?: number;
+  safetyBuffer?: number;
+  reserveFloor?: number;
 }
 
 export interface CreateBranchDTO {
@@ -169,6 +183,33 @@ export class FinancialGitService {
     return this.branchManager.projectTimeline(dto.branchId, dto.days, {
       startDate: dto.startDate,
       initialBalance: dto.initialBalance,
+    });
+  }
+
+  public checkRunway(dto: CheckRunwayDTO): RunwayWarningResult {
+    let timeline: DailyBalancePoint[];
+
+    if (dto.timeline) {
+      timeline = dto.timeline;
+    } else if (dto.branchId) {
+      timeline = this.branchManager.projectTimeline(dto.branchId, dto.days, {
+        startDate: dto.startDate,
+        initialBalance: dto.initialBalance,
+        commits: dto.commits,
+      });
+    } else if (dto.commits) {
+      timeline = this.branchManager.projectTimeline("main", dto.days, {
+        startDate: dto.startDate,
+        initialBalance: dto.initialBalance,
+        commits: dto.commits,
+      });
+    } else {
+      throw new Error("Either branchId, commits, or timeline is required to check runway.");
+    }
+
+    return checkRunwayAndDeficit(timeline, {
+      safetyBuffer: dto.safetyBuffer ?? dto.reserveFloor,
+      reserveFloor: dto.reserveFloor ?? dto.safetyBuffer,
     });
   }
 }
