@@ -1,4 +1,4 @@
-import type { NodeMap, ResolveBalanceOptions, TransactionNode } from "../types/index.js";
+import type { NodeMap, ResolveBalanceOptions, TransactionNode } from "../types/index";
 
 /**
  * Normalizes Map or Record object into a lookup function.

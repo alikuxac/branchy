@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  transpilePackages: ["@branchy/git-engine", "@branchy/ui"],
+};
 
 export default nextConfig;

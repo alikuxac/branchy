@@ -1,2 +1,2 @@
-export * from "./analytics/runway.js";
-export { checkRunway } from "./core/branch-manager.js";
+export * from "./analytics/runway";
+export { checkRunway } from "./core/branch-manager";

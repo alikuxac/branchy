@@ -1,1 +1,1 @@
-export * from "./analytics/calculator.js";
+export * from "./analytics/calculator";

@@ -2,7 +2,7 @@ import type {
   CommitNode,
   DailyBalancePoint,
   ProjectTimelineOptions,
-} from "../types/index.js";
+} from "../types/index";
 
 const DAY_MS = 86_400_000;
 

@@ -1,2 +1,2 @@
-export * from "./ledger-resolver.js";
-export * from "./branch-manager.js";
+export * from "./ledger-resolver";
+export * from "./branch-manager";

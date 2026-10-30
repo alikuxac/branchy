@@ -1,3 +1,3 @@
-export * from "./calculator.js";
-export * from "./simulator.js";
-export * from "./runway.js";
+export * from "./calculator";
+export * from "./simulator";
+export * from "./runway";

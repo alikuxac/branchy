@@ -1,2 +1,2 @@
-export * from "./analytics/simulator.js";
-export { projectTimeline } from "./core/branch-manager.js";
+export * from "./analytics/simulator";
+export { projectTimeline } from "./core/branch-manager";

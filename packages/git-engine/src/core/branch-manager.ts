@@ -10,10 +10,10 @@ import type {
   TransactionPayload,
   TransactionType,
   VirtualCommitPayload,
-} from "../types/index.js";
-import { getCommitAncestry } from "../analytics/calculator.js";
-import { simulateDailyTimeline } from "../analytics/simulator.js";
-import { checkRunwayAndDeficit } from "../analytics/runway.js";
+} from "../types/index";
+import { getCommitAncestry } from "../analytics/calculator";
+import { simulateDailyTimeline } from "../analytics/simulator";
+import { checkRunwayAndDeficit } from "../analytics/runway";
 
 export interface BranchManagerOptions {
   initialBalance?: number;
@@ -132,6 +132,23 @@ export class BranchManager {
     }
     this.activeBranchId = target.id;
     return target;
+  }
+
+  /**
+   * Deletes a branch by ID or name (cannot delete main branch).
+   */
+  public deleteBranch(idOrName: string): boolean {
+    const branch = this.getBranch(idOrName);
+    if (!branch) {
+      throw new Error(`Branch '${idOrName}' not found.`);
+    }
+    if (branch.name === "main" || branch.id === "b_main") {
+      throw new Error("Cannot delete main branch.");
+    }
+    if (this.activeBranchId === branch.id) {
+      this.activeBranchId = "b_main";
+    }
+    return this.branches.delete(branch.id);
   }
 
   /**

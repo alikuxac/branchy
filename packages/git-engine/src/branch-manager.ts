@@ -1,1 +1,1 @@
-export * from "./core/branch-manager.js";
+export * from "./core/branch-manager";

@@ -2,7 +2,7 @@ import type {
   DailyBalancePoint,
   RunwayWarningOptions,
   RunwayWarningResult,
-} from "../types/index.js";
+} from "../types/index";
 
 /**
  * Scans a DailyBalancePoint[] timeline to evaluate runway and financial deficit risk.

@@ -1,1 +1,1 @@
-export * from "./core/ledger-resolver.js";
+export * from "./core/ledger-resolver";

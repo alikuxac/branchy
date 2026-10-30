@@ -4,7 +4,7 @@ import type {
   DiffResult,
   SafeToSpendOptions,
   SafeToSpendResult,
-} from "../types/index.js";
+} from "../types/index";
 
 /**
  * Calculates cumulative balance along a commit chain starting from head commit.
